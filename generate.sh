@@ -27,7 +27,7 @@ pandoc --from=html --to=pdf \
     --dpi=300 \
     -V book \
     -V lang=en-US \
-    -V geometry=margin=1cm \
+    -V geometry=margin=1.5cm \
     "$HTML_FILE"
 
 pandoc --from=html --to=epub \
