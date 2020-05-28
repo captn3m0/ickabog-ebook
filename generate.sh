@@ -27,8 +27,7 @@ pandoc --from=html --to=pdf \
     --dpi=300 \
     -V book \
     -V lang=en-US \
-    -V geometry=margin=3cm \
-    --columns=60 \
+    -V geometry=margin=1cm \
     "$HTML_FILE"
 
 pandoc --from=html --to=epub \
@@ -36,3 +35,19 @@ pandoc --from=html --to=epub \
     --epub-metadata=metadata.xml \
     --metadata title="The Ickabog" \
     "$HTML_FILE"
+
+pandoc --from=html --to=pdf \
+    -V fontsize=18pt \
+    --output=ickabog-large.pdf \
+    --metadata title="The Ickabog" \
+    --metadata author="J.K Rowling" \
+    --pdf-engine=context \
+    -V margin-left=0cm \
+    -V margin-right=0cm \
+    -V margin-top=0cm \
+    -V margin-bottom=0cm \
+    -V geometry=margin=0cm \
+    -V lang=en-US \
+    "$HTML_FILE"
+
+
