@@ -20,7 +20,7 @@ done
 echo "</body></html>" >> "$HTML_FILE"
 
 pandoc --from=html --to=pdf \
-    --output=ickabog.pdf \
+    --output=ickabog1.pdf \
     --metadata title="The Ickabog" \
     --metadata author="J.K Rowling" \
     --pdf-engine=xelatex \
@@ -30,15 +30,18 @@ pandoc --from=html --to=pdf \
     -V geometry=margin=1.5cm \
     "$HTML_FILE"
 
+pdftk cover.pdf ickabog1.pdf cat output ickabog.pdf
+
 pandoc --from=html --to=epub \
     --output=ickabog.epub \
     --epub-metadata=metadata.xml \
+    --epub-cover-image=cover.jpg \
     --metadata title="The Ickabog" \
     "$HTML_FILE"
 
 pandoc --from=html --to=pdf \
     -V fontsize=18pt \
-    --output=ickabog-large.pdf \
+    --output=ickabog2.pdf \
     --metadata title="The Ickabog" \
     --metadata author="J.K Rowling" \
     --pdf-engine=context \
@@ -50,4 +53,4 @@ pandoc --from=html --to=pdf \
     -V lang=en-US \
     "$HTML_FILE"
 
-
+pdftk cover.pdf ickabog2.pdf cat output ickabog-large.pdf
