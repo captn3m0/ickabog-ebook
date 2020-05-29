@@ -10,8 +10,10 @@ wget https://www.theickabog.com/daisy-dovetail/ -O ch5.html
 wget https://www.theickabog.com/the-fight-in-the-courtyard/ -O ch6.html
 wget https://www.theickabog.com/lord-spittleworth-tells-tales/ -O ch7.html
 wget https://www.theickabog.com/the-day-of-petition/ -O ch8.html
+wget https://www.theickabog.com/the-shepherds-story/ -O ch9.html
+wget https://www.theickabog.com/king-freds-quest/ -O ch10.html
 
-for i in $(seq 1 8); do
+for i in $(seq 1 10); do
   CHAPTER_TITLE=$(cat "ch$i.html" | pup 'h1.entry-title:nth-child(2) text{}')
   echo "<h2>$CHAPTER_TITLE</h2>" >> "$HTML_FILE"
   cat "ch$i.html" | pup 'article div.row:nth-child(2) div.entry-content' >> "$HTML_FILE"
