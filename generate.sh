@@ -2,19 +2,29 @@
 
 HTML_FILE=ickabog.html
 echo "<html><head><title>The Ickabog</title></head><body>" > "$HTML_FILE"
-wget https://www.theickabog.com/king-fred-the-fearless/ -O ch1.html
-wget https://www.theickabog.com/the-ickabog/ -O ch2.html
-wget https://www.theickabog.com/death-of-a-seamstress/ -O ch3.html
-wget https://www.theickabog.com/the-quiet-house/ -O ch4.html
-wget https://www.theickabog.com/daisy-dovetail/ -O ch5.html
-wget https://www.theickabog.com/the-fight-in-the-courtyard/ -O ch6.html
-wget https://www.theickabog.com/lord-spittleworth-tells-tales/ -O ch7.html
-wget https://www.theickabog.com/the-day-of-petition/ -O ch8.html
-wget https://www.theickabog.com/the-shepherds-story/ -O ch9.html
-wget https://www.theickabog.com/king-freds-quest/ -O ch10.html
-wget https://www.theickabog.com/the-journey-north/ -O ch11.html
 
-for i in $(seq 1 11); do
+function download_chapter() {
+    if [ ! -f "$2" ]; then
+        echo "Downloading $2"
+        wget --quiet "https://www.theickabog.com/$1" -O "$2"
+    fi
+}
+
+download_chapter "king-fred-the-fearless/" "ch1.html"
+download_chapter "the-ickabog/" "ch2.html"
+download_chapter "death-of-a-seamstress/" "ch3.html"
+download_chapter "the-quiet-house/" "ch4.html"
+download_chapter "daisy-dovetail/" "ch5.html"
+download_chapter "the-fight-in-the-courtyard/" "ch6.html"
+download_chapter "lord-spittleworth-tells-tales/" "ch7.html"
+download_chapter "the-day-of-petition/" "ch8.html"
+download_chapter "the-shepherds-story/" "ch9.html"
+download_chapter "king-freds-quest/" "ch10.html"
+download_chapter "the-journey-north/" "ch11.html"
+download_chapter "the-kings-lost-sword/" "ch12.html"
+download_chapter "the-accident/" "ch13.html"
+
+for i in $(seq 1 13); do
   CHAPTER_TITLE=$(cat "ch$i.html" | pup 'h1.entry-title:nth-child(2) text{}')
   echo "<h2>$CHAPTER_TITLE</h2>" >> "$HTML_FILE"
   cat "ch$i.html" | pup 'article div.row:nth-child(2) div.entry-content' >> "$HTML_FILE"
