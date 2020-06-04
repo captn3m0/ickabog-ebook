@@ -1,4 +1,4 @@
-*.html
+**.html
 *.epub
 *.pdf
 !cover.pdf

@@ -1,33 +1,34 @@
 #!/bin/bash
 
+mkdir -p html
+
 HTML_FILE=ickabog.html
 echo "<html><head><title>The Ickabog</title></head><body>" > "$HTML_FILE"
 
 function download_chapter() {
-    if [ ! -f "$2" ]; then
-        echo "Downloading $2"
-        wget --quiet "https://www.theickabog.com/$1" -O "$2"
-    fi
+    [ -s "html/$2.html" ] || wget --quiet "https://www.theickabog.com/$1" -O "html/$2.html"
 }
 
-download_chapter "king-fred-the-fearless/" "ch1.html"
-download_chapter "the-ickabog/" "ch2.html"
-download_chapter "death-of-a-seamstress/" "ch3.html"
-download_chapter "the-quiet-house/" "ch4.html"
-download_chapter "daisy-dovetail/" "ch5.html"
-download_chapter "the-fight-in-the-courtyard/" "ch6.html"
-download_chapter "lord-spittleworth-tells-tales/" "ch7.html"
-download_chapter "the-day-of-petition/" "ch8.html"
-download_chapter "the-shepherds-story/" "ch9.html"
-download_chapter "king-freds-quest/" "ch10.html"
-download_chapter "the-journey-north/" "ch11.html"
-download_chapter "the-kings-lost-sword/" "ch12.html"
-download_chapter "the-accident/" "ch13.html"
+download_chapter "king-fred-the-fearless/" "ch1"
+download_chapter "the-ickabog/" "ch2"
+download_chapter "death-of-a-seamstress/" "ch3"
+download_chapter "the-quiet-house/" "ch4"
+download_chapter "daisy-dovetail/" "ch5"
+download_chapter "the-fight-in-the-courtyard/" "ch6"
+download_chapter "lord-spittleworth-tells-tales/" "ch7"
+download_chapter "the-day-of-petition/" "ch8"
+download_chapter "the-shepherds-story/" "ch9"
+download_chapter "king-freds-quest/" "ch10"
+download_chapter "the-journey-north/" "ch11"
+download_chapter "the-kings-lost-sword/" "ch12"
+download_chapter "the-accident/" "ch13"
+download_chapter "lord-spittleworths-plan/" "ch14"
+download_chapter "the-king-returns/" "ch15"
 
-for i in $(seq 1 13); do
-  CHAPTER_TITLE=$(cat "ch$i.html" | pup 'h1.entry-title:nth-child(2) text{}')
+for i in $(seq 1 15); do
+  CHAPTER_TITLE=$(cat "html/ch$i.html" | pup 'h1.entry-title:nth-child(2) text{}')
   echo "<h2>$CHAPTER_TITLE</h2>" >> "$HTML_FILE"
-  cat "ch$i.html" | pup 'article div.row:nth-child(2) div.entry-content' >> "$HTML_FILE"
+  cat "html/ch$i.html" | pup 'article div.row:nth-child(2) div.entry-content' >> "$HTML_FILE"
 done
 
 echo "</body></html>" >> "$HTML_FILE"
