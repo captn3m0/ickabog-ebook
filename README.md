@@ -1,6 +1,6 @@
 # ickabog-ebook
 
-Generates ebooks for The Ickabog by J.K Rowling. Original text from https://www.theickabog.com/
+Generates ebooks for The Ickabog by J.K Rowling. Original text from https://www.theickabog.com/. Since the book is still being published, please consider this "in-progress".
 
 ## Dependencies:
 

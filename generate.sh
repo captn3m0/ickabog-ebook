@@ -24,8 +24,13 @@ download_chapter "the-kings-lost-sword/" "ch12"
 download_chapter "the-accident/" "ch13"
 download_chapter "lord-spittleworths-plan/" "ch14"
 download_chapter "the-king-returns/" "ch15"
+download_chapter bert-says-goodbye/ ch16
+download_chapter goodfellow-makes-a-stand/ ch17
+download_chapter end-of-an-advisor/ ch18
+download_chapter lady-eslanda/ ch19
 
-for i in $(seq 1 15); do
+
+for i in $(seq 1 19); do
   CHAPTER_TITLE=$(cat "html/ch$i.html" | pup 'h1.entry-title:nth-child(2) text{}')
   echo "<h2>$CHAPTER_TITLE</h2>" >> "$HTML_FILE"
   cat "html/ch$i.html" | pup 'article div.row:nth-child(2) div.entry-content' >> "$HTML_FILE"
