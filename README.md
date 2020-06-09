@@ -5,7 +5,7 @@ Generates ebooks for The Ickabog by J.K Rowling. Original text from https://www.
 ## Dependencies:
 
 - `wget`
-- [`pup`](https://github.com/ericchiang/pup)
+- [`pup`](https://github.com/ericchiang/pup) and `jq` to parse input files
 - [`pandoc`](https://pandoc.org/) to generate EPUB and PDF files
 - `qpdf` to add cover to PDF files. (optional)
 - `kindlegen` or `calibre` installed to generate MOBI files. (optional)
