@@ -13,11 +13,11 @@ Generates ebooks for The Ickabog by J.K Rowling. Original text from https://www.
 
 `./generate.sh`
 
-You should have `ickabog.epub`, and `ickabog.pdf` in your directory after the script finishes. If you have [ConTeXt](https://wiki.contextgarden.net/Main_Page) installed, you will also get a `ickabog-large.pdf` file with large fonts to be kid-friendly.
+You should have `ickabog.epub`, and `ickabog.pdf` in your directory after the script finishes. If you have [ConTeXt][context] installed, you will also get a `ickabog-large.pdf` file with large fonts to be kid-friendly.
 
 ## Known Issues
 
-2. The PDF is optimized for few pages of printing, so has a small font size by default. If you'd like a kid-friendly version, install context to get `ickabog-large.pdf` file.
+The PDF is optimized for few pages of printing, so has a small font size by default. If you'd like a kid-friendly version, [install context][context] to get `ickabog-large.pdf` file.
 
 ## Extra
 
@@ -32,3 +32,5 @@ The cover art is [Avanyu](http://edan.si.edu/saam/id/object/1979.144.85) by Juli
 ## License
 
 The little code in this repository is licensed under the [MIT License](https://nemo.mit-license.org/). See LICENSE file for details.
+
+[context]: https://wiki.contextgarden.net/Main_Page
