@@ -14,7 +14,11 @@ Generates ebooks for The Ickabog by J.K Rowling. Original text from https://www.
 
 `./generate.sh`
 
-You should have `ickabog.epub`, and `ickabog.pdf` in your directory after the script finishes. If you have [ConTeXt][context] installed, you will also get a `ickabog-large.pdf` file with large fonts to be kid-friendly.
+You should have `ickabog.epub`, and `ickabog.pdf` in the `out` directory after the script finishes.
+
+- If you have [ConTeXt][context] installed, you will also get a `out/ickabog-large.pdf` file with large fonts to be kid-friendly.
+- If you have `qpdf` installed, the PDF files will have cover pages
+- If you have `calibre` or `kindlegen` installed, a `out/ickabog.mobi` file will also be generated. Preference is given to `kindlegen`.
 
 ## Known Issues
 
