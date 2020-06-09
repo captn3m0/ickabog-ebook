@@ -9,28 +9,30 @@ function download_chapter() {
     [ -s "html/$2.html" ] || wget --quiet "https://www.theickabog.com/$1" -O "html/$2.html"
 }
 
-download_chapter "king-fred-the-fearless/" "ch1"
-download_chapter "the-ickabog/" "ch2"
-download_chapter "death-of-a-seamstress/" "ch3"
-download_chapter "the-quiet-house/" "ch4"
-download_chapter "daisy-dovetail/" "ch5"
-download_chapter "the-fight-in-the-courtyard/" "ch6"
-download_chapter "lord-spittleworth-tells-tales/" "ch7"
-download_chapter "the-day-of-petition/" "ch8"
-download_chapter "the-shepherds-story/" "ch9"
-download_chapter "king-freds-quest/" "ch10"
-download_chapter "the-journey-north/" "ch11"
-download_chapter "the-kings-lost-sword/" "ch12"
-download_chapter "the-accident/" "ch13"
-download_chapter "lord-spittleworths-plan/" "ch14"
-download_chapter "the-king-returns/" "ch15"
+download_chapter king-fred-the-fearless/ ch1
+download_chapter the-ickabog/ ch2
+download_chapter death-of-a-seamstress/ ch3
+download_chapter the-quiet-house/ ch4
+download_chapter daisy-dovetail/ ch5
+download_chapter the-fight-in-the-courtyard/ ch6
+download_chapter lord-spittleworth-tells-tales/ ch7
+download_chapter the-day-of-petition/ ch8
+download_chapter the-shepherds-story/ ch9
+download_chapter king-freds-quest/ ch10
+download_chapter the-journey-north/ ch11
+download_chapter the-kings-lost-sword/ ch12
+download_chapter the-accident/ ch13
+download_chapter lord-spittleworths-plan/ ch14
+download_chapter the-king-returns/ ch15
 download_chapter bert-says-goodbye/ ch16
 download_chapter goodfellow-makes-a-stand/ ch17
 download_chapter end-of-an-advisor/ ch18
 download_chapter lady-eslanda/ ch19
+download_chapter medals-for-beamish-and-buttons/ ch20
+download_chapter professor-fraudysham/ ch21
 
 
-for i in $(seq 1 19); do
+for i in $(seq 1 21); do
   CHAPTER_TITLE=$(cat "html/ch$i.html" | pup 'h1.entry-title:nth-child(2) text{}')
   echo "<h2>$CHAPTER_TITLE</h2>" >> "$HTML_FILE"
   cat "html/ch$i.html" | pup 'article div.row:nth-child(2) div.entry-content' >> "$HTML_FILE"

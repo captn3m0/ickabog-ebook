@@ -2,6 +2,8 @@
 
 Generates ebooks for The Ickabog by J.K Rowling. Original text from https://www.theickabog.com/. Since the book is still being published, please consider this "in-progress".
 
+<progress value="21" max="34">21/34 chapters published</progress>
+
 ## Dependencies:
 
 - `wget`
