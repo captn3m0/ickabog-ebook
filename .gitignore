@@ -2,3 +2,5 @@
 *.epub
 *.pdf
 !cover.pdf
+out/
+metadata.xml

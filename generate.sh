@@ -1,77 +1,114 @@
 #!/bin/bash
+set -euo pipefail
+IFS=$'\n\t'
+
+OUTPUT_DIR=out
 
 mkdir -p html
-
+mkdir -p "$OUTPUT_DIR"
+MAIN_STORY_OUTPUT_FILE="$OUTPUT_DIR/read-the-story.html"
 HTML_FILE=ickabog.html
-echo "<html><head><title>The Ickabog</title></head><body>" > "$HTML_FILE"
 
+LC=${LC:-""}
+if [[ "$LC" != "" ]]; then
+    LC="/$LC"
+fi
+MAIN_STORY_URL="https://www.theickabog.com$LC/read-the-story/"
+
+echo "[+] Fetching $MAIN_STORY_URL"
+
+wget --quiet "$MAIN_STORY_URL" --output-document "$MAIN_STORY_OUTPUT_FILE"
+
+LANG=$(cat "$MAIN_STORY_OUTPUT_FILE"| pup 'html attr{lang}')
+echo "[+] Language set to $LANG"
+
+MAIN_TITLE=$(cat "$MAIN_STORY_OUTPUT_FILE" | pup 'ul.chapters__list a json{}' | jq -r '[.[] | {url: .href, chapter: .children[0].children[0].children[0].children[0].text, title: .children[0].children[0].children[0].children[1].text}] | sort_by(.chapter) | .[]|[.chapter, .title, .url] | @tsv' | grep $' 2\t' | while IFS=$'\t' read -r chapter title url; do echo "$title"; done)
+
+echo "[+] Title set to $MAIN_TITLE"
+
+echo "<html lang=$LANG><head><meta charset=UTF-8><title>$MAIN_TITLE</title></head><body>" > "$HTML_FILE"
+
+# args = "$url" "$chapter" "$title"
 function download_chapter() {
-    [ -s "html/$2.html" ] || wget --quiet "https://www.theickabog.com/$1" -O "html/$2.html"
+    [[ $2 =~ 1$ ]] && MAIN_TITLE=$3
+    URL=$( [[ $1 =~ ^http ]] && echo "$1" || echo "https://www.theickabog.com$1" )
+    [ -s "html/$2.html" ] || wget --quiet "$URL" -O "html/$2.html"
+    echo "<h1>$3</h1>" >> "$HTML_FILE"
+    cat "html/$2.html" | pup 'article div.row:nth-child(2) div.entry-content' >> "$HTML_FILE"
 }
 
-download_chapter king-fred-the-fearless/ ch1
-download_chapter the-ickabog/ ch2
-download_chapter death-of-a-seamstress/ ch3
-download_chapter the-quiet-house/ ch4
-download_chapter daisy-dovetail/ ch5
-download_chapter the-fight-in-the-courtyard/ ch6
-download_chapter lord-spittleworth-tells-tales/ ch7
-download_chapter the-day-of-petition/ ch8
-download_chapter the-shepherds-story/ ch9
-download_chapter king-freds-quest/ ch10
-download_chapter the-journey-north/ ch11
-download_chapter the-kings-lost-sword/ ch12
-download_chapter the-accident/ ch13
-download_chapter lord-spittleworths-plan/ ch14
-download_chapter the-king-returns/ ch15
-download_chapter bert-says-goodbye/ ch16
-download_chapter goodfellow-makes-a-stand/ ch17
-download_chapter end-of-an-advisor/ ch18
-download_chapter lady-eslanda/ ch19
-download_chapter medals-for-beamish-and-buttons/ ch20
-download_chapter professor-fraudysham/ ch21
-
-
-for i in $(seq 1 21); do
-  CHAPTER_TITLE=$(cat "html/ch$i.html" | pup 'h1.entry-title:nth-child(2) text{}')
-  echo "<h2>$CHAPTER_TITLE</h2>" >> "$HTML_FILE"
-  cat "html/ch$i.html" | pup 'article div.row:nth-child(2) div.entry-content' >> "$HTML_FILE"
-done
+cat "$MAIN_STORY_OUTPUT_FILE" |
+pup 'ul.chapters__list a json{}' |
+jq -r '[.[] | {url: .href, chapter: .children[0].children[0].children[0].children[0].text, title: .children[0].children[0].children[0].children[1].text}] | sort_by(.chapter | match("[0-9]+$")) | .[]|[.chapter, .title, .url] | @tsv' |
+while IFS=$'\t' read -r chapter title url; do download_chapter "$url" "$chapter" "$title"; done
 
 echo "</body></html>" >> "$HTML_FILE"
 
-pandoc --from=html --to=pdf \
-    --output=ickabog1.pdf \
-    --metadata title="The Ickabog" \
-    --metadata author="J.K Rowling" \
+cat <<__METADATA__ > metadata.xml
+<dc:creator opf:role="aut">J.K Rowling</dc:creator>
+__METADATA__
+
+pandoc --from=html \
+    --output="$OUTPUT_DIR/ickabog.epub" \
+    --epub-metadata=metadata.xml \
+    --epub-cover-image=cover.jpg \
+    --epub-chapter-level=1 \
+    "$HTML_FILE"
+
+echo "[+] Generated $OUTPUT_DIR/ickabog.epub"
+
+if command -v kindlegen > /dev/null; then
+    kindlegen "$OUTPUT_DIR/ickabog.epub" > /dev/null 2>&1
+    echo "[+] Generated MOBI using kindlegen: $OUTPUT_DIR/ickabog.mobi"
+elif command -v ebook-convert > /dev/null; then
+    ebook-convert "$OUTPUT_DIR/ickabog.epub" \
+        "$OUTPUT_DIR/ickabog.mobi" \
+        --metadata title="$MAIN_TITLE" \
+        > /dev/null 2>&1
+    echo "[+] Generated MOBI using ebook-convert: $OUTPUT_DIR/ickabog.mobi"
+else
+    echo "[-] Could not generate MOBI, install kindlegen or calibre"
+fi
+
+command -v xelatex >/dev/null && \
+pandoc --from=html \
     --pdf-engine=xelatex \
-    --dpi=300 \
-    -V book \
-    -V lang=en-US \
+    --metadata title="$MAIN_TITLE" \
+    --metadata author="J.K Rowling" \
+    --output="$OUTPUT_DIR/ickabog-no-cover.pdf" \
+    -V lang="$LANG" \
     -V geometry=margin=1.5cm \
     "$HTML_FILE"
 
-pdftk cover.pdf ickabog1.pdf cat output ickabog.pdf
+if command -v qpdf > /dev/null; then
+    qpdf --empty --pages cover.pdf "$OUTPUT_DIR/ickabog-no-cover.pdf" -- "$OUTPUT_DIR/ickabog.pdf"
+else
+    mv "$OUTPUT_DIR/ickabog-no-cover.pdf" "$OUTPUT_DIR/ickabog.pdf"
+fi
 
-pandoc --from=html --to=epub \
-    --output=ickabog.epub \
-    --epub-metadata=metadata.xml \
-    --epub-cover-image=cover.jpg \
-    --metadata title="The Ickabog" \
-    "$HTML_FILE"
+echo "[+] Generated PDF using xelatex: $OUTPUT_DIR/ickabog.pdf"
 
-pandoc --from=html --to=pdf \
-    -V fontsize=18pt \
-    --output=ickabog2.pdf \
-    --metadata title="The Ickabog" \
-    --metadata author="J.K Rowling" \
-    --pdf-engine=context \
-    -V margin-left=0cm \
-    -V margin-right=0cm \
-    -V margin-top=0cm \
-    -V margin-bottom=0cm \
-    -V geometry=margin=0cm \
-    -V lang=en-US \
-    "$HTML_FILE"
+# Run only if context is available
+if command -v context>/dev/null; then
+    pandoc --from=html --to=pdf \
+        -V fontsize=18pt \
+        --output="$OUTPUT_DIR/ickabog-large-no-cover.pdf" \
+        --metadata title="$MAIN_TITLE" \
+        --metadata author="J.K Rowling" \
+        --pdf-engine=context \
+        -V margin-left=0cm \
+        -V margin-right=0cm \
+        -V margin-top=0cm \
+        -V margin-bottom=0cm \
+        -V geometry=margin=0cm \
+        -V lang="$LANG" \
+        "$HTML_FILE"
 
-pdftk cover.pdf ickabog2.pdf cat output ickabog-large.pdf
+    if command -v qpdf > /dev/null; then
+        qpdf --empty --pages cover.pdf "$OUTPUT_DIR/ickabog-large-no-cover.pdf" -- "$OUTPUT_DIR/ickabog-large.pdf"
+    else
+        mv "$OUTPUT_DIR/ickabog-no-cover.pdf" "$OUTPUT_DIR/ickabog-large.pdf"
+    fi
+fi
+
+echo "[+] Generated PDF using context: $OUTPUT_DIR/ickabog-large.pdf"

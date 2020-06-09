@@ -6,8 +6,9 @@ Generates ebooks for The Ickabog by J.K Rowling. Original text from https://www.
 
 - `wget`
 - [`pup`](https://github.com/ericchiang/pup)
-- [`pandoc`](https://pandoc.org/)
-- [`pdftk`]
+- [`pandoc`](https://pandoc.org/) to generate EPUB and PDF files
+- `qpdf` to add cover to PDF files. (optional)
+- `kindlegen` or `calibre` installed to generate MOBI files. (optional)
 
 ## How to run
 
@@ -28,6 +29,8 @@ A list of my other EBook generation projects: https://captnemo.in/ebooks/, inclu
 The cover art is [Avanyu](http://edan.si.edu/saam/id/object/1979.144.85) by Julian Martinez. Used under Creative Commons license.
 
 > Julian Martinez, Avanyu, ca. 1923, watercolor, ink, and pencil on paper, Smithsonian American Art Museum, Corbin-Henderson Collection, gift of Alice H. Rossin, 1979.144.85
+
+Code for internationalization and automatic chapter updates via [@lesensei](https://github.com/lesensei/ickabog-ebook/commits/master)'s fork.
 
 ## License
 
