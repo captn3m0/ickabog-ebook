@@ -1,4 +1,4 @@
-# ickabog-ebook ![](https://img.shields.io/badge/Chapters%20Published-21%2F34-brightgreen)
+# ickabog-ebook ![](https://img.shields.io/badge/Chapters%20Published-29%2F34-brightgreen)
 
 Generates ebooks for The Ickabog by J.K Rowling. Original text from https://www.theickabog.com/. Since the book is still being published, please consider this "in-progress". Supports all 7 languages.
 
@@ -61,7 +61,7 @@ You should have `ickabog.epub`, and `ickabog.pdf` in the `out` directory after t
 
 ## Known Issues
 
-The PDF is optimized for few pages of printing, so has a small font size by default. If you'd like a kid-friendly version, [install context][context] to get `ickabog-large.pdf` file. ConTeXt comes preinstalled in the Docker image, so that's the easiest way to get the same.
+The PDF is optimized for few pages of printing, so has a small font size by default. If you'd like a kid-friendly version, [install context][context] to get `ickabog-large.pdf` file. ~ConTeXt comes preinstalled in the Docker image, so that's the easiest way to get the same.~
 
 ## Credits
 

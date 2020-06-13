@@ -75,6 +75,7 @@ pandoc --from=html \
     --pdf-engine=xelatex \
     --metadata title="$MAIN_TITLE" \
     --metadata author="J.K Rowling" \
+    --toc \
     --output="$OUTPUT_DIR/ickabog-no-cover.pdf" \
     -V lang="$LANG" \
     -V geometry=margin=1.5cm \
@@ -109,6 +110,6 @@ if command -v context>/dev/null; then
     else
         mv "$OUTPUT_DIR/ickabog-no-cover.pdf" "$OUTPUT_DIR/ickabog-large.pdf"
     fi
-fi
 
-echo "[+] Generated PDF using context: $OUTPUT_DIR/ickabog-large.pdf"
+    echo "[+] Generated PDF using context: $OUTPUT_DIR/ickabog-large.pdf"
+fi
