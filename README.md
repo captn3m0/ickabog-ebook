@@ -1,6 +1,6 @@
-# ickabog-ebook ![](https://img.shields.io/badge/Chapters%20Published-34%2F34-brightgreen)
+# ickabog-ebook ![](https://img.shields.io/badge/Chapters%20Published-32%2F34-brightgreen)
 
-Generates ebooks for The Ickabog by J.K Rowling. Original text from https://www.theickabog.com/. ~~Since the book is still being published, please consider this "in-progress"~~. The book is now completely published. This script supports all 7 languages.
+Generates ebooks for The Ickabog by J.K Rowling. Original text from https://www.theickabog.com/. Since the book is still being published, please consider this "in-progress". Supports all 7 languages.
 
 ## Dependencies:
 
