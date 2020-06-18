@@ -1,6 +1,6 @@
-# ickabog-ebook ![](https://img.shields.io/badge/Chapters%20Published-32%2F34-brightgreen)
+# ickabog-ebook ![](https://img.shields.io/badge/Chapters%20Published%2036-brightgreen)
 
-Generates ebooks for The Ickabog by J.K Rowling. Original text from https://www.theickabog.com/. Since the book is still being published, please consider this "in-progress". Supports all 7 languages.
+Generates ebooks for The Ickabog by J.K Rowling. Original text from https://www.theickabog.com/. Since the book is still being published, please consider this "in-progress". Supports all 9 languages. Note that not all languages have the complete book yet.
 
 ## Dependencies:
 
@@ -41,6 +41,12 @@ docker run --env LC="de" --volume `pwd`/out:/src/out captn3m0/ickabog-ebook
 
 # Português brasileiro
 docker run --env LC="pt" --volume `pwd`/out:/src/out captn3m0/ickabog-ebook
+
+# 中文
+docker run --env LC="ch" --volume `pwd`/out:/src/out captn3m0/ickabog-ebook
+
+# Русский
+docker run --env LC="ru" --volume `pwd`/out:/src/out captn3m0/ickabog-ebook
 ```
 
 ### Directly
@@ -51,7 +57,7 @@ For generating ebooks for a different language, run the script with a LC paramet
 
 `LC=it ./generate.sh`
 
-Various values for LC are: `it, en-us, es, fr, de, pt`. If you don't pass a value, the default (en-GB) is used.
+Various values for LC are: `it, en-us, es, fr, de, pt, ch, ru`. If you don't pass a value, the default (en-GB) is used.
 
 You should have `ickabog.epub`, and `ickabog.pdf` in the `out` directory after the script finishes.
 
