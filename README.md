@@ -1,4 +1,4 @@
-# ickabog-ebook ![](https://img.shields.io/badge/Chapters%20Published%2042-brightgreen)
+# ickabog-ebook ![](https://img.shields.io/badge/Chapters%20Published%2046-brightgreen)
 
 Generates ebooks for The Ickabog by J.K Rowling. Original text from https://www.theickabog.com/. Since the book is still being published, please consider this "in-progress". Supports all 9 languages. Note that not all languages have the complete book yet.
 
