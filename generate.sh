@@ -13,7 +13,7 @@ LC=${LC:-""}
 if [[ "$LC" != "" ]]; then
     LC="/$LC"
 fi
-MAIN_STORY_URL="https://www.theickabog.com$LC/read-the-story/"
+MAIN_STORY_URL="https://web.archive.org/web/20200713135719/https://www.theickabog.com$LC/read-the-story/"
 
 echo "[+] Fetching $MAIN_STORY_URL"
 
@@ -31,7 +31,7 @@ echo "<html lang=$LANG><head><meta charset=UTF-8><title>$MAIN_TITLE</title></hea
 # args = "$url" "$chapter" "$title"
 function download_chapter() {
     [[ $2 =~ 1$ ]] && MAIN_TITLE=$3
-    URL=$( [[ $1 =~ ^http ]] && echo "$1" || echo "https://www.theickabog.com$1" )
+    URL=$( [[ $1 =~ ^http ]] && echo "$1" || echo "https://web.archive.org$1" )
     [ -s "html/$2.html" ] || wget --quiet "$URL" -O "html/$2.html"
     echo "<h1>$3</h1>" >> "$HTML_FILE"
     cat "html/$2.html" | pup 'article div.row:nth-child(2) div.entry-content' >> "$HTML_FILE"
