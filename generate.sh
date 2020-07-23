@@ -34,7 +34,7 @@ function download_chapter() {
     URL=$( [[ $1 =~ ^http ]] && echo "$1" || echo "https://web.archive.org$1" )
     [ -s "html/$2.html" ] || wget --quiet "$URL" -O "html/$2.html"
     echo "<h1>$3</h1>" >> "$HTML_FILE"
-    cat "html/$2.html" | pup 'article div.row:nth-child(2) div.entry-content' >> "$HTML_FILE"
+    cat "html/$2.html" | pup -p --charset UTF-8 'article div.row:nth-child(2) div.entry-content' >> "$HTML_FILE"
 }
 
 cat "$MAIN_STORY_OUTPUT_FILE" |
