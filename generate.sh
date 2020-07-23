@@ -38,7 +38,7 @@ function download_chapter() {
 }
 
 cat "$MAIN_STORY_OUTPUT_FILE" |
-pup 'ul.chapters__list a json{}' |
+pup -p --charset UTF-8 'ul.chapters__list a json{}' |
 jq -r '[.[] | {url: .href, chapter: .children[0].children[0].children[0].children[0].text, title: .children[0].children[0].children[0].children[1].text}] | sort_by(.chapter | match("[0-9]+$")) | .[]|[.chapter, .title, .url] | @tsv' |
 while IFS=$'\t' read -r chapter title url; do download_chapter "$url" "$chapter" "$title"; done
 
