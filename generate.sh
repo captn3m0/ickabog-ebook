@@ -13,11 +13,17 @@ LC=${LC:-""}
 if [[ "$LC" != "" ]]; then
     LC="/$LC"
 fi
-MAIN_STORY_URL="https://web.archive.org/web/20200713135719/https://www.theickabog.com$LC/read-the-story/"
+
+if [[ "$LC" == "" || "$LC" == "en-US" ]]; then
+    MAIN_STORY_URL="https://web.archive.org/web/20200713135650/https://www.theickabog.com/$LC/read-the-story/"
+else
+    # Non-english editions are still accessible on the original website.
+    MAIN_STORY_URL="https://www.theickabog.com$LC/read-the-story/"
+fi
 
 echo "[+] Fetching $MAIN_STORY_URL"
 
-wget --quiet "$MAIN_STORY_URL" --output-document "$MAIN_STORY_OUTPUT_FILE"
+wget --quiet --timeout=10 "$MAIN_STORY_URL" --output-document "$MAIN_STORY_OUTPUT_FILE"
 
 LANG=$(cat "$MAIN_STORY_OUTPUT_FILE"| pup 'html attr{lang}')
 echo "[+] Language set to $LANG"
@@ -31,8 +37,18 @@ echo "<html lang=$LANG><head><meta charset=UTF-8><title>$MAIN_TITLE</title></hea
 # args = "$url" "$chapter" "$title"
 function download_chapter() {
     [[ $2 =~ 1$ ]] && MAIN_TITLE=$3
-    URL=$( [[ $1 =~ ^http ]] && echo "$1" || echo "https://web.archive.org$1" )
-    [ -s "html/$2.html" ] || wget --quiet "$URL" -O "html/$2.html"
+    # We have a direct link, so lets use that
+    if [[ $1 =~ ^http ]]; then
+        URL="$1"
+    # For english, we need to make sure we are using the archive link
+    elif [[ "$LANG" == "en-US" || "$LANG" == "en-GB" ]]; then
+        URL="https://web.archive.org$1"
+    # For others cases, let us make it a absolute URL
+    else
+        URL="https://www.theickabog.com$1"
+    fi
+    echo $URL
+    [ -s "html/$2.html" ] || wget --timeout=10 --quiet "$URL" -O "html/$2.html"
     echo "<h1>$3</h1>" >> "$HTML_FILE"
     cat "html/$2.html" | pup -p --charset UTF-8 'article div.row:nth-child(2) div.entry-content' >> "$HTML_FILE"
 }
