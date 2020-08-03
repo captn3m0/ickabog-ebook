@@ -86,20 +86,25 @@ else
     echo "[-] Could not generate MOBI, install kindlegen or calibre"
 fi
 
-command -v xelatex >/dev/null && \
-pandoc --from=html \
-    --pdf-engine=xelatex \
-    --metadata title="$MAIN_TITLE" \
-    --metadata author="J.K Rowling" \
-    --toc \
-    --output="$OUTPUT_DIR/ickabog-no-cover.pdf" \
-    -V lang="$LANG" \
-    -V geometry=margin=1.5cm \
-    "$HTML_FILE"
+if command -v xelatex >/dev/null; then
+    pandoc --from=html \
+        --pdf-engine=xelatex \
+        --metadata title="$MAIN_TITLE" \
+        --metadata author="J.K Rowling" \
+        --toc \
+        --output="$OUTPUT_DIR/ickabog-no-cover.pdf" \
+        -V lang="$LANG" \
+        -V geometry=margin=1.5cm \
+        "$HTML_FILE"
+else
+    echo "[-] Missing xelatex, please install xelatex before trying again"
+    exit
+fi
 
 if command -v qpdf > /dev/null; then
     qpdf --empty --pages cover.pdf "$OUTPUT_DIR/ickabog-no-cover.pdf" -- "$OUTPUT_DIR/ickabog.pdf"
 else
+    echo "[-] qpdf not installed, PDF won't have cover"
     mv "$OUTPUT_DIR/ickabog-no-cover.pdf" "$OUTPUT_DIR/ickabog.pdf"
 fi
 
@@ -128,4 +133,6 @@ if command -v context>/dev/null; then
     fi
 
     echo "[+] Generated PDF using context: $OUTPUT_DIR/ickabog-large.pdf"
+else
+    echo "[-] Can't find ConTeXt, not generating large-text PDF"
 fi
